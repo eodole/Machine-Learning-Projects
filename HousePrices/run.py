@@ -9,6 +9,8 @@ Created on Thu Sep 30 09:09:40 2021
 import sklearn 
 from sklearn import linear_model
 from sklearn import metrics
+from sklearn import model_selection
+from sklearn import datasets
 import math
 import matplotlib 
 from matplotlib import pyplot as plt
@@ -30,7 +32,7 @@ def readInData(file_name):
     xvals = np.array(scaled_df.loc[:,1:13])
     return(xvals, yvals)
 
-xvals, yvals = readInData("./house_scale.txt")   
+  
 
 #Problem 1
 def Problem1(xvals,yvals): 
@@ -45,14 +47,16 @@ def Problem1(xvals,yvals):
     print(RR_1.coef_)
 
 #Problem 2
-def Problem2(xvals,yvals):
-    train_x = xvals[0:400,]
-    test_x = xvals[401:,]
-    train_y = yvals[0:400]
-    test_y = yvals[401:]
+def Problem2(xvals,yvals, train_x = None, train_y = None, test_x = None, test_y = None):
+    if train_x == None:
+        train_x = xvals[0:400,]
+        test_x = xvals[401:,]
+        train_y = yvals[0:400]
+        test_y = yvals[401:]
     
     #Fit the Lasso
     test_a = [0,0.001,0.01,0.1,1,10,100]
+    
     LassoRMSEtest = []
     LassoRMSEtrain = []
     RidgeRMSEtest = []
@@ -69,6 +73,7 @@ def Problem2(xvals,yvals):
         LassoRMSEtrain.append(math.sqrt(sklearn.metrics.mean_absolute_error(train_y, pred)))
         
         #Train the Ridge Regression Model 
+        a = a * 2 * len(train_y)
         RR_2 = sklearn.linear_model.Ridge(alpha =a, fit_intercept = True)
         RR_2.fit(train_x,train_y)
         pred = RR_2.predict(test_x)
@@ -90,15 +95,46 @@ def Problem2(xvals,yvals):
     plt.show()
     
 
-def Problem3(xvals,yvals):
-    print("")
+def Problem3_4(xvals,yvals, train_x = None, train_y = None, test_x = None, test_y = None):
+    if train_x == None:
+        train_x = xvals[0:400,]
+        test_x = xvals[401:,]
+        train_y = yvals[0:400]
+        test_y = yvals[401:]
     
+    test_a = [0.001,0.01,0.1,1,10,100]
+    test_aRidge = [a* 2 * np.shape(train_y)[0] for a in test_a]
     
+    Lasso = sklearn.linear_model.LassoCV(fit_intercept=True, cv = 5, alphas=test_a)
+  
+    
+    Lasso.fit(train_x,train_y)
+    print("Lasso Optimal alpha: ", Lasso.alpha_)
+    pred = Lasso.predict(test_x)
+    LassoRMSE = math.sqrt(sklearn.metrics.mean_absolute_error(test_y, pred))
+    print("Lasso Testing Error: ",LassoRMSE)
+    
+    RR = sklearn.linear_model.RidgeCV(fit_intercept = True, cv = 5, alphas = test_aRidge)
+    RR.fit(train_x,train_y)
+    print("Ridge Regression Optimal alpha: ", RR.alpha_)
+    pred = RR.predict(test_x)
+    RRrmse = math.sqrt(sklearn.metrics.mean_absolute_error(test_y, pred))
+    print("Ridge Regression Testing Error: ", RRrmse)
+    
+def Problem_5():
+    
+    with open("./Problem5_Q1.txt", 'w') as file:
+        file.write(Problem1(xvals, yvals))
+   
 
-
+#xvals, yvals = readInData("./house_scale.txt") 
 #Problem1(xvals, yvals)
 #Problem2(xvals, yvals)
-    
+#Problem3_4(xvals,yvals)    
+
+#xvals, yvals = readInData("./house.txt")
+#Problem3_4(xvals,yvals) 
+
 
 
 
