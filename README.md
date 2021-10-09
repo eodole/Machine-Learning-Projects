@@ -9,4 +9,10 @@ Short project using numpy to create a document term matrix that helps to identif
 
 __Project 2: Boston House Prices__
 
-Use skit-learn to predict Boston Housing prices. 
+Use scikit-learn to predict Boston Housing prices. 
+
+__Project 3: kNN and Naive Bayes__
+
+Use scikit learn to do kth nearest neighbor classification
+
+
