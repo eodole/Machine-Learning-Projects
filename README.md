@@ -13,6 +13,10 @@ Use scikit-learn to predict Boston Housing prices.
 
 __Project 3: kNN and Naive Bayes__
 
-Use scikit learn to do kth nearest neighbor classification
+Use scikit learn to do kth nearest neighbor classification, Naive Bayes implementation not included
+
+__Project 4: Logistic Regression and Support Vector Machine__
+
+Used liblinear and scikit learn to do classification, also implemented 3 preprocessing methods: scaling, standardization and normalization. 
 
 
